@@ -61,7 +61,8 @@ Delay = -ln(1-(2/5))RC seconds
       = 24.0088 &times; 10<sup>-3</sup> seconds  
       = 24.0088 milliseconds  
 
-To confirm the estimate, I would have to measure the delay from power-on to the first /M1 pulse.
+To confirm the estimate, I would have to measure the delay from power-on to the first /M1 pulse,
+using measured resistor and capacitor values.
 
 ### External Power-on Auto-Reset
 
@@ -85,6 +86,9 @@ Delay = -ln(1/3)RC seconds
       = 1.098612 &times; 10<sup>-1</sup> seconds  
       = 109.8612 &times; 10<sup>-3</sup> seconds  
       = 109.8612 milliseconds  
+
+The uncertainty in this calculation comes from the resistor and capacitor tolerances,
+added to a 1% accuracy in the 555 timing and a &plusmn;4% variance in the 555 threshold.
 
 When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not installed on the board.
 
@@ -110,10 +114,10 @@ What's appropriate?
 
 How is one to know?
 
-In his book *Build Your Z80 Own Computer*, Steve Ciarcia gives as the reason for
-an automatic power-on reset as causing the CPU to delay executing instructions
-until the rest of the computer is powered up.
-He mentions delays of 35-50 milliseconds for a computer that will eventually
+In his book *Build Your Own Z80 Computer*, Steve Ciarcia gives as the reason for
+an automatic power-on reset to cause the CPU to delay executing instructions
+until the rest of the computer is powered up and ready to respond to CPU signals.
+He mentions delays of 35-50 milliseconds for a computer that would eventually
 include memory and I/O subsystems, including parallel and serial I/O,
 a keyboard, and a CRT controller for an ASCII terminal.
 However, for a single-board computer, such as the John Bell Engineering 80-280,
@@ -164,7 +168,7 @@ The middle line, offset 0190, contains the only errors on the chip.
 ### Decompiling
 
 Because the program is so short, I decompiled it by hand and ran the source
-through an assembler, with this result:
+through an assembler to verify it, with this result:
 
 ```
 0001   0000             ; TEST 1

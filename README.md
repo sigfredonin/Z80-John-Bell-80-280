@@ -137,7 +137,7 @@ The board I have came with a 2716 EPROM labelled TEST 1.
 I was not sure that a 2716 programmed around 1980 would still be readable,
 but in fact it contains only a few bits in error far from the test program,
 which occupies the first 18 bytes.
-The test program outputs a two-byte count, 0000..FFFF, to the two ports on the PIO.
+The test program outputs a two-byte count, 0000..FFFF, to the two PIO ports.
 
 ### EPROM Reader
 
@@ -147,7 +147,7 @@ the 2716 EPROM and wrote it in hexadecimal to the serial terminal emulator on th
 From there, I could copy and paste it into a text file.
 
 This was sufficient for my purposes, since I could convert the hex text to binary with a
-separate program.
+separate program, if I needed to.
 
 The result for the TEST 1 EPROM was:
 

@@ -40,11 +40,27 @@ I was left to conjecture what its value might be.
 The 10&mu;F value I put on the schematic, based on documentation for John Bell Engineering 80-153 6502 boards,
 matches the value in the documentation for the 80-280 board,
 which was made available online recently in an ebay post.
+
 I have not yet tested what delay the combination of 4.7K&ohm; and 10&mu;F provides.
+The RC circuit applies a rising exponential 1-e<sup>-T/RC</sup> to the Z80 /RESET input.
 If the Z80 /RESET input threshold matches TTL specifications
 (V<sub>L</sub> &leq; 0.8 volts, 2.0 volts &leq; V<sub>H</sub>),
 then R=4.7K&ohm;, C=10&mu;F, provides a /RESET low signal between 8.2 and 24 milliseconds long from power on,
 without considering typical resistor (5%) and electrolytic capacitor (20%) tolerances.
+
+The delays are calculated as:
+
+Delay = -ln(1-(0.8/5))RC seconds  
+      = 0.174353(4.7 &times; 10<sup>3</sup>)(10 &times; 10<sup>-6</sup>) seconds  
+      = 8.195 &times; 10<sup>-3</sup> seconds  
+      = 8.195 milliseconds  
+
+Delay = -ln(1-(2/5))RC seconds  
+      = 0.510826(4.7 &times; 10<sup>3</sup>)(10 &times; 10<sup>-6</sup>) seconds  
+      = 2.40088 &times; 10<sup>-2</sup> seconds  
+      = 24.0088 &times; 10<sup>-3</sup> seconds  
+      = 24.0088 milliseconds  
+
 To confirm the estimate, I would have to measure the delay from power-on to the first /M1 pulse.
 
 ### External Power-on Auto-Reset
@@ -56,7 +72,7 @@ The recommended circuit uses R=1M&ohm;, C=0.1&mu;F, for a delay of 110 milliseco
 
 Note that the recommended circuit connects the capacitor between Vcc and pins 2 and 6,
 and the resistor between pins 2 and 6 and ground.
-The input to pins 2 and 6 is a decaying exponential e<sup>T/RC</sup> that begins at Vcc and drops to ground,
+The input to pins 2 and 6 is a decaying exponential e<sup>-T/RC</sup> that begins at Vcc and drops to ground,
 because the capacitor has no charge when power is applied.
 The circuit takes the /RESET signal from pin 7, the discharge pin, and uses the 4.7K&ohm; on the board
 as a pull-up resistor.
@@ -75,7 +91,7 @@ When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not
 ### How Long Should Power-on /RESET be?
 
 The Z80 CPU documentation shows an example reset circuit that includes a power-on auto-reset feature,
-implemented with an R=10K&ohm;, C=68&mu;F rising exponential delay 1-e<sup>T/RC</sup>,
+implemented with an R=10K&ohm;, C=68&mu;F rising exponential delay 1-e<sup>-T/RC</sup>,
 and a 74132 schmitt trigger gate with a nominal rising voltage threshold of 1.7 volts.
 That circuit should provide a delay of about 1/3 second:
 

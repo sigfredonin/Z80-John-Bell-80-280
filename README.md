@@ -12,7 +12,7 @@ This project records the results of my efforts.
 ## Z-80 Computer 80-280 by John Bell Engineering
 
 The 80-280 Z-80 single-board computer is a 4.15" x 3.3" PC board with a 25-pin edge connector
-on each side (only the component side is used).
+on each side (only the edge connector on the component side is used).
 The board hosts a Z80 CPU, Z80 PIO, 2Kx8 2716 or 4Kx8 2532 EPROM,
 and a pair of 1Kx4 2114 static RAMs that provide 1K bytes of read/write memory.
 A 74LS04 Hex Inverter and a 74LS10 Triple 3-input NAND provide a clock generator and address decoding.
@@ -126,5 +126,64 @@ From there, I could copy and paste it into a text file.
 This was sufficient for my purposes, since I could convert the hex text to binary with a
 separate program.
 
+The result for the TEST 1 EPROM was:
+
+```
+15:32:41.785 -> Read 2716 EPROM.
+15:32:41.785 -> 0000: 3E0FD302D3032100007DD3007CD30123
+15:32:43.004 -> 0010: 18F7FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+15:32:44.223 -> 0020: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+...
+15:33:12.119 -> 0190: FFFFFFFFFFFFFFFFFFFFDB98FFFFFFFF
+...
+15:35:14.710 -> 07E0: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+15:35:15.920 -> 07F0: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+```
+
+The first two lines contain the test program.
+The middle line, offset 0190, contains the only errors on the chip.
+
 ### Decompiling
+
+Because the program is so short, I decompiled it by hand and ran the source
+through an assembler, with this result:
+
+```
+0001   0000             ; TEST 1
+0002   0000             ;    Test program for John Bell Z80 Computer 80-280.
+0003   0000             ;    Output a 16-bit count on PIO ports A and B.
+0004   0000             ;    Reverse engineered from EPROM on board.
+0005   0000             ;
+0006   0000             ; TEST 1 EPROM
+0007   0000             ;
+0008   0000             ; 15:32:41.785 -> Read 2716 EPROM.
+0009   0000             ; 15:32:41.785 -> 0000: 3E0FD302D3032100007DD3007CD30123
+0010   0000             ; 15:32:43.004 -> 0010: 18F7FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+0011   0000             ; ...
+0012   0000             ;
+0013   0000             ; Sig Nin, July 27, 2022
+0014   0000             ;
+0015   0000             	.ORG 	0000h
+0016   0000             ;
+0017   0000             MODEOUT .EQU 00001111B
+0018   0000             ADATA   .EQU 0
+0019   0000             BDATA   .EQU 1
+0020   0000             ACTRL   .EQU 2
+0021   0000             BCTRL   .EQU 3
+0022   0000             ;
+0023   0000             ; Set PIO Ports A and B to output mode
+0024   0000 3E 0F            LD  A,MODEOUT     ; Mode control word: output mode - 00..1111
+0025   0002 D3 02            OUT (ACTRL),A     ; Set port A mode
+0026   0004 D3 03            OUT (BCTRL),A     ; Set port B mode
+0027   0006             ; Output 16-bit count on ports: low order on A, high order on B
+0028   0006 21 00 00         LD  HL,0000H      ; Set count to zero
+0029   0009 7D          L1   LD  A,L           ; Low order byte ..
+0030   000A D3 00            OUT (ADATA),A     ; .. on port A
+0031   000C 7C               LD  A,H           ; High order byte ..
+0032   000D D3 01            OUT (BDATA),A     ; .. on port B
+0033   000F 23               INC  HL           ; Increment count
+0034   0010 18 F7            JR   L1           ; Repeat
+0035   0012             ;
+0036   0012                  .END
+```
 

@@ -37,14 +37,15 @@ The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
 The board I have did not include the capacitor for the power-on auto-reset circuit.
 I was left to conjecture what its value might be.
-The 10&mu;F value on the schematic matches the value in the documentation for the board,
-which was made available online in an ebay post.
+The 10&mu;F value I put on the schematic, based on documentation for John Bell Engineering 80-153 6502 boards,
+matches the value in the documentation for the 80-280 board,
+which was made available online recently in an ebay post.
 I have not yet tested what delay the combination of 4.7K&ohm; and 10&mu;F provides.
 If the Z80 /RESET input threshold matches TTL specifications
-(V<sub>L</sub> <= 0.8 volts, 2.0 volts <= V<sub>H</sub>),
+(V<sub>L</sub> &leq; 0.8 volts, 2.0 volts &leq; V<sub>H</sub>),
 then R=4.7K&ohm;, C=10&mu;F, provides a /RESET low signal between 8.2 and 24 milliseconds long from power on,
-without considering resister (5%) and capacitor (20%) tolerances.
-To confirm that, I would have to measure the delay from power-on to the first /M1 pulse.
+without considering typical resistor (5%) and electrolytic capacitor (20%) tolerances.
+To confirm the estimate, I would have to measure the delay from power-on to the first /M1 pulse.
 
 ### External Power-on Auto-Reset
 

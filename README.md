@@ -129,6 +129,7 @@ The rest of the system, who knows?
 It is up to the board user, and since for the 80-280 the interface to the rest of
 the system is the PIO ports, the user can choose to program a delay or a handshake
 to verify system readiness.
+The power-on auto-reset circuit does not have to provide all of the needed delay.
 
 ## TEST 1 EPROM
 

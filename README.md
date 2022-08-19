@@ -82,7 +82,7 @@ This provides a low logic level until the input signal decays to 1/3 Vcc.
 The delay is calculated as:
 
 Delay = -ln(1/3)RC seconds  
-      = 1.098612(1 &times; 10<sup>3</sup>)(0.1 &times; 10<sup>-6</sup>) seconds  
+      = 1.098612(1 &times; 10<sup>6</sup>)(0.1 &times; 10<sup>-6</sup>) seconds  
       = 1.098612 &times; 10<sup>-1</sup> seconds  
       = 109.8612 &times; 10<sup>-3</sup> seconds  
       = 109.8612 milliseconds  

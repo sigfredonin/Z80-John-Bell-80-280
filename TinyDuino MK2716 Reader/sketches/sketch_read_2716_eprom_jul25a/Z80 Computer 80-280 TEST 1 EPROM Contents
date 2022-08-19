@@ -1,0 +1,19 @@
+TEST 1 EPROM
+
+15:32:41.785 -> Read 2716 EPROM.
+15:32:41.785 -> 0000: 3E0FD302D3032100007DD3007CD30123
+15:32:43.004 -> 0010: 18F7FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+...
+
+; TEST 1 - Output 16 bit count on PIO ports A and B
+0000 3E0F        LD  A,x'0F'       ; Mode control word: output mode - 00..1111
+0002 D302        OUT (2),A         ; Set port A mode
+0004 D303        OUT (3),A         ; Set port B mode
+0006 210000      LD  HL,x'0000'    ; Set count to zero
+0009 7D     L1:  LD  A,L           ; Low order byte ..
+000A D300        OUT (0),A         ; .. on port A
+000C 7C          LD  A,H           ; High order byte ..
+000D D301        OUT (1),A         ; .. on port B
+000F 23          INC  HL           ; Increment count
+0010 18F7        JR   L1           ; Repeat
+0012

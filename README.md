@@ -1,6 +1,9 @@
 # Z80-John-Bell-80-280
 *Hardware reverse-engineering and software for 1980 Z-80 SBC 80-280 by John Bell Engineering.*
 
+![80-280 Z80 Computer John Bell Engineering 1980 - component side](/image/Z80_SBC_Component_Side.PNG "Z80 SBC Component Side")
+![80-280 Z80 Computer John Bell Engineering 1980 - solder side](/image/Z80_SBC_Solder_Side.PNG "Z80 SBC Solder Side")
+
 I have a 1980 vintage Z80 single-board computer model 80-280 by John Bell Engineering.
 I wanted to try running it, but to program it I would need to know the addresses of the EPROM, the RAM, and the PIO.
 I could not find the information on the web (though it later became available),
@@ -71,6 +74,8 @@ circuit based on a 555 Timer IC.  The 555 Timer has precisely specified threshol
 so the delay can be precisely calculated for particular RC combinations.
 The recommended circuit uses R=1M&ohm;, C=0.1&mu;F, for a delay of 110 milliseconds.
 
+![80-153 6502 Micro John Bell Engineering 1980 - better auto-reset](/image/80-153_better_auto-reset.PNG "6502 SBC better auto-reset")
+
 Note that the recommended circuit connects the capacitor between Vcc and pins 2 and 6,
 and the resistor between pins 2 and 6 and ground.
 The input to pins 2 and 6 is a decaying exponential e<sup>-T/RC</sup> that begins at Vcc and drops to ground,
@@ -97,6 +102,9 @@ When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not
 The Z80 CPU documentation shows an example reset circuit that includes a power-on auto-reset feature,
 implemented with an R=10K&ohm;, C=68&mu;F rising exponential delay 1-e<sup>-T/RC</sup>,
 and a 74132 schmitt trigger gate with a nominal rising voltage threshold of 1.7 volts.
+
+![Z80 reset circuit recommended in Z80 datasheet](/image/Recommended_Z80_Reset_Circuit_from_CPU_datasheet.PNG "Z80 datasheet auto-reset")
+
 That circuit should provide a delay of about 1/3 second:
 
 Delay = -ln(1-(1.7/5))RC seconds  

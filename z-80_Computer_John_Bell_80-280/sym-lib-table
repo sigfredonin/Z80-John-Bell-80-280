@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name "Memory_Mostek_EPROM")(type "KiCad")(uri "C:/Users/zigni/Documents/z80/KiCad/eprom-lib/MOSTEK_EPROM.kicad_sym")(options "")(descr ""))
+  (lib (name "cbm")(type "KiCad")(uri "C:/Users/zigni/Documents/z80/KiCad/cbm-lib/cbm.kicad_sym")(options "")(descr ""))
+  (lib (name "AT28C16-15P")(type "KiCad")(uri "C:/Users/zigni/Documents/z80/KiCad/eprom-lib/AT28C16-15P.kicad_sym")(options "")(descr ""))
+)

@@ -1,0 +1,4 @@
+PS C:\Program Files\Z80 Workbench\assembler> .\uz80as C:\Users\zigni\Documents\z80\test_1_80-280.asm C:\Users\zigni\Documents\z80\test_1_80-280.obj C:\Users\zigni\Documents\z80\test_1_80-280.lst
+Pass 1 completed.
+Pass 2 completed.
+PS C:\Program Files\Z80 Workbench\assembler>

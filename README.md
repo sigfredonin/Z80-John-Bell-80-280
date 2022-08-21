@@ -177,11 +177,11 @@ Another 8-bit shift register holds the data read from the EPROM.
 
 The connections to the TinyDuino microcontroller are in three groups:
 
-| Address Register Controls | Data Register Controls   | EPROM Controls      |
-| ------------------------- | ------------------------ | ------------------- |
-| CLKA : Shift right 1 bit  | CLKD : Shift right 1 bit | /CE : Chip enable   |
-| Dso  : Serial data out    | Dsi  : Serial data in    | /OE : Output enable |
-|                           | LDE  : Parallel load     |                     |
+| Address Register Controls | Data Register Controls    | EPROM Controls      |
+| ------------------------- | ------------------------- | ------------------- |
+| CLKA : Shift right 1 bit  | CLKD : Shift right 1 bit  | /CE : Chip enable   |
+| Dso  : Serial data out    | Dsi  : Serial data in     | /OE : Output enable |
+|                           | LDE  : Parallel load mode |                     |
 
 A ground connection provides a common signal reference between the TinyDuino and
 the EPROM reader circuit.
@@ -234,6 +234,16 @@ then toggles CLKD high then low.
 The data register parallel loads the data on the 2716 EPROM's data lines
 on the rising edge of CLKD.
 
+The TinyDuino sets /OE high so that the 2716 EPROM's data lines are set in the
+high impedance state.
+It sets /CE high to put the 2716 EPROM in its quiescent state, not reading its data.
+LDE is still high.
+
+#### Data Input
+
+To read the data byte now in the data register, the TinyDuino shifts it in
+low order bit first on the Dsi line.
+
 The TinyDuino sets LDE low to put the data register in right shift mode.
 It reads the low order bit of the data register on the Dsi line,
 then toggles CLKD high then low to shift the register right.
@@ -241,10 +251,8 @@ It repeats this 8 times to shift in the byte.
 
 The TinyDuino sets LDE high, so that the data register's data lines are set
 in the high impedance state.
-It sets /OE high so that the 2716 EPROM's data lines are also set in the
-high impedance state.
-It sets /CE high to put the 2716 EPROM in its quiescent state, not reading its data.
 CLKD was left low after the last shift, and Dsi is not receiving data from any source.
+/CE and /OE are both high.
 This is the normal state of LDE, CLKD, Dsi, /CE, and /OE between data reads.
 
 This completes the read cycle for one byte.

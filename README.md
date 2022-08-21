@@ -118,7 +118,7 @@ added to a 1% accuracy in the 555 timing and a &plusmn;4% variance in the 555 th
 
 When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not installed on the board.
 
-#### How Long Should Power-on /RESET be?
+#### Manual Reset
 
 The Z80 CPU documentation shows an example reset circuit that includes a power-on auto-reset feature,
 implemented with an R=10K&ohm;, C=68&mu;F rising exponential delay 1-e<sup>-t/RC</sup>,
@@ -126,7 +126,7 @@ and a 74132 schmitt trigger gate with a nominal rising voltage threshold of 1.7 
 
 ![Z80 reset circuit recommended in Z80 datasheet](/image/Recommended_Z80_Reset_Circuit_from_CPU_datasheet.PNG "Z80 datasheet auto-reset")
 
-That circuit should provide a delay of about 1/3 second:
+That circuit should provide a delay of about 1/4 to 1/3 second:
 
 Delay = -ln(1-(1.7/5))RC seconds  
       = 0.415515(10 &times; 10<sup>3</sup>)(68 &times; 10<sup>-6</sup>) seconds  
@@ -134,10 +134,14 @@ Delay = -ln(1-(1.7/5))RC seconds
       = 282.551 &times; 10<sup>-3</sup> seconds  
       = 282.551 milliseconds  
 
+#### How Long Should Power-on /RESET be?
+
 The on-board power-on auto-reset circuit would provide between 8.2 and 24 milliseconds
 (if my calculations are correct; a test with a 7404 inverter measured ~8 milliseconds).
 
 The recommended external 555 Timer circuit provides a 110 millisecond delay.
+
+The sample reset circuit in the CPU Technical Manual provides a delay of 1/4 to 1/3 second.
 
 What's appropriate?
 

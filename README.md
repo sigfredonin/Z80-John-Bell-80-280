@@ -170,7 +170,8 @@ The EPROM reader circuit comprises three shift registers.
 
 A 4-bit shift register holds the high order 3 bits of the address,
 An 8-bit shift register holds the low order 8 bits of the address.
-They are wired to form a 12-bit address register.
+They are wired together to form a 12-bit address register,
+and provide the 2716 EPROM with the 11 address bits it requires.
 
 Another 8-bit shift register holds the data read from the EPROM.
 

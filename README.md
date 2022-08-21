@@ -158,9 +158,13 @@ The test program outputs a two-byte count, 0000..FFFF, to the two PIO ports.
 ### EPROM Reader
 
 The EPROM reader, which I built with 3 shift register ICs on a solderless breadboard
-and a short C program on an Arduino compatible micro-controller, read the content of
+and a short C program on an Arduino compatible micro-controller (a TinyDuino), read the content of
 the 2716 EPROM and wrote it in hexadecimal to the serial terminal emulator on the attached PC.
 From there, I could copy and paste it into a text file.
+
+| [2716 EPROM Reader - schematic &rightarrow;](/image/TinyDuino_MK2716_EPROM_Reader.pdf) |
+|----------------------------------------------------------- |
+![2716 EPROM Reader - schematic](/image/EPROM_2716_Reader_schematic.PNG "2716 EPROM Reader")
 
 This was sufficient for my purposes, since I could convert the hex text to binary with a
 separate program, if I needed to.

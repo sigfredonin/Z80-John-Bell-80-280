@@ -169,7 +169,9 @@ From there, I could copy and paste it into a text file.
 This was sufficient for my purposes, since I could convert the hex text to binary with a
 separate program, if I needed to.
 
-The result for the TEST 1 EPROM was:
+### EPROM Content
+
+The content read from the TEST 1 EPROM was:
 
 ```
 15:32:41.785 -> Read 2716 EPROM.

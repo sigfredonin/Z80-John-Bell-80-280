@@ -32,7 +32,7 @@ provides a cheap power-on auto-reset circuit.
 This is pretty close to a minimal Z80 computer.
 | [80-280 Z80 Computer John Bell Engineering 1980 - schematic &rightarrow;](/image/Z80_SBC_80-280_schematic.pdf) |
 |----------------------------------------------------------- |
-![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic.PNG "Z80 SBC Schematic")
+![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic_big.PNG "Z80 SBC Schematic")
 
 ### Clock Generator
 
@@ -161,15 +161,105 @@ The EPROM reader, which I built with 3 shift register ICs on a solderless breadb
 and a short C program on an Arduino compatible micro-controller (a TinyDuino), read the content of
 the 2716 EPROM and wrote it in hexadecimal to the serial terminal emulator on the attached PC.
 From there, I could copy and paste it into a text file.
-
-| [2716 EPROM Reader - schematic &rightarrow;](/image/TinyDuino_MK2716_EPROM_Reader.pdf) |
-|----------------------------------------------------------- |
-![2716 EPROM Reader - schematic](/image/EPROM_2716_Reader_schematic.png "2716 EPROM Reader")
-
 This was sufficient for my purposes, since I could convert the hex text to binary with a
 separate program, if I needed to.
 
-The result for the TEST 1 EPROM was:
+### EPROM Reader Circuit
+
+The EPROM reader circuit comprises three shift registers.
+
+A 4-bit shift register holds the high order 3 bits of the address.
+An 8-bit shift register holds the low order 8 bits of the address.
+They are wired together to form a 12-bit address register,
+and provide the 2716 EPROM with the 11 address bits it requires.
+
+Another 8-bit shift register holds the data read from the EPROM.
+
+The connections to the TinyDuino microcontroller are in three groups:
+
+| Address Register Controls | Data Register Controls    | EPROM Controls      |
+| ------------------------- | ------------------------- | ------------------- |
+| CLKA : Shift right 1 bit  | CLKD : Shift right 1 bit  | /CE : Chip enable   |
+| Dso  : Serial data out    | Dsi  : Serial data in     | /OE : Output enable |
+|                           | LDE  : Parallel load mode |                     |
+
+A ground connection provides a common signal reference between the TinyDuino and
+the EPROM reader circuit.
+The two are powered by separate 5 volt supplies.
+
+| [2716 EPROM Reader - schematic &rightarrow;](/image/TinyDuino_MK2716_EPROM_Reader.pdf) |
+|----------------------------------------------------------- |
+![2716 EPROM Reader - schematic](/image/EPROM_2716_Reader_schematic_big.png "2716 EPROM Reader")
+
+### EPROM Reader Circuit Operation
+
+To operate the EPROM reader circuit, the TinyDuino manipulates the control lines to
+shift an address into the address register, cause the 2716 EPROM to read the byte at
+that address, cause the data register to parallel load the data, and finally shift
+the byte read out of the data register.
+The TinyDuino repeats this read cycle for each byte to be read,
+normally, all 2048 bytes.
+
+#### Address Load
+
+The shift registers comprising the address registered are configured so that
+the low order register shifts on the rising edge of the CLKA signal, and
+the high order register shifts on the falling edge.
+When not loading an address, the TinyDuino keeps CLKA low and Dso does not matter.
+
+To load the address, the TinyDuino sets the low order address bit, A0, on the Dso line,
+then toggles the CLKA signal high then low.
+The rising edge causes the low order register to shift right, thereby replacing
+its high order bit with the low order bit of the high order register;
+it shifts its own low order bit out the right end, discarding it.
+The falling edge of CLKA causes the high order register to shift right, thereby replacing
+its high order bit with the bit on the Dso line;
+it shifts its own low order bit out the right end, discarding it,
+but that bit has already been captured by the low order address register.
+
+The TinyDuino repeats the operation 12 times to load a 12-bit address in low-to-high order,
+A0..A11, into the address register, the low order 11 bits of which are the required EPROM
+data byte address.
+
+At the end of the address load operation, CLKA is again low and Dso does not matter.
+
+#### Data Read
+
+Once the address is loaded, the TinyDuino sets /CE low to cause the 2716 EPROM
+to read the byte at that address, then /OE low so the EPROM presents the byte read
+on its data lines.
+
+The TinyDuino sets LDE high to put the data register in parallel load mode,
+then toggles CLKD high then low.
+The data register parallel loads the data on the 2716 EPROM's data lines
+on the rising edge of CLKD.
+
+The TinyDuino sets /OE high so that the 2716 EPROM's data lines are set in the
+high impedance state.
+It sets /CE high to put the 2716 EPROM in its quiescent state, not reading its data.
+LDE is still high.
+
+#### Data Input
+
+To read the data byte now in the data register, the TinyDuino shifts it in
+low order bit first on the Dsi line.
+
+The TinyDuino sets LDE low to put the data register in right shift mode.
+It reads the low order bit of the data register on the Dsi line,
+then toggles CLKD high then low to shift the register right.
+It repeats this 8 times to shift in the byte.
+
+The TinyDuino sets LDE high, so that the data register's data lines are set
+in the high impedance state.
+CLKD was left low after the last shift, and Dsi is not receiving data from any source.
+/CE and /OE are both high.
+This is the normal state of LDE, CLKD, Dsi, /CE, and /OE between data reads.
+
+This completes the read cycle for one byte.
+
+### EPROM Content
+
+The content read from the TEST 1 EPROM was:
 
 ```
 15:32:41.785 -> Read 2716 EPROM.

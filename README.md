@@ -48,7 +48,14 @@ The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
 ![80-280 clock generator](/image/Z80_SBC_clock_generator.PNG "Z80 SBC Clock Generator")
 
-### On-board Power-on Auto-Reset
+### CPU Reset
+
+The 80-280 board includes provisions to signal the CPU to reset:
+it provides an optional on-board power-on auto-reset, and
+it routes the CPU /RESET signal to the card edge connector
+so that the user can implement off-board reset circuitry.
+
+#### On-board Power-on Auto-Reset
 
 The board I have did not include the capacitor for the power-on auto-reset circuit.
 I was left to conjecture what its value might be.
@@ -81,7 +88,7 @@ Delay = -ln(1-(2/5))RC seconds
 To confirm the estimate, I would have to measure the delay from power-on to the first /M1 pulse,
 using measured resistor and capacitor values.
 
-### External Power-on Auto-Reset
+#### External Power-on Auto-Reset
 
 The John Bell Engineering documentation recommends an external power-on auto-reset
 circuit based on a 555 Timer IC.  The 555 Timer has precisely specified thresholds at 1/3 and 2/3 Vcc,
@@ -111,7 +118,7 @@ added to a 1% accuracy in the 555 timing and a &plusmn;4% variance in the 555 th
 
 When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not installed on the board.
 
-### How Long Should Power-on /RESET be?
+#### How Long Should Power-on /RESET be?
 
 The Z80 CPU documentation shows an example reset circuit that includes a power-on auto-reset feature,
 implemented with an R=10K&ohm;, C=68&mu;F rising exponential delay 1-e<sup>-t/RC</sup>,

@@ -1,8 +1,9 @@
 # Z80-John-Bell-80-280
 *Hardware reverse-engineering and software for 1980 Z-80 SBC 80-280 by John Bell Engineering.*
 
-![80-280 Z80 Computer John Bell Engineering 1980 - component side](/image/Z80_SBC_Component_Side.PNG "Z80 SBC Component Side")
-![80-280 Z80 Computer John Bell Engineering 1980 - solder side](/image/Z80_SBC_Solder_Side.PNG "Z80 SBC Solder Side")
+| [80-280 component side &rightarrow;](/image/Z80_SBC_Component_Side_Full_Size.JPG) | [80-280 solder side &rightarrow;](/image/Z80_SBC_Component_Solder_Full_Size.JPG) |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| ![80-280 Z80 Computer John Bell Engineering 1980 - component side](/image/Z80_SBC_Component_Side.PNG "Z80 SBC Component Side") | ![80-280 Z80 Computer John Bell Engineering 1980 - solder side](/image/Z80_SBC_Solder_Side.PNG "Z80 SBC Solder Side") |
 
 I have a 1980 vintage Z80 single-board computer model 80-280 by John Bell Engineering.
 I wanted to try running it, but to program it I would need to know the addresses of the EPROM, the RAM, and the PIO.
@@ -29,7 +30,8 @@ A 10&mu;F electrolytic capacitor can be installed, which together with the 4.7K&
 provides a cheap power-on auto-reset circuit.
 
 This is pretty close to a minimal Z80 computer.
-
+| [80-280 Z80 Computer John Bell Engineering 1980 - schematic &rightarrow;](/image/Z80_SBC_80-280_schematic.pdf) |
+|----------------------------------------------------------- |
 ![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic.PNG "Z80 SBC Schematic")
 
 ### Clock Generator
@@ -38,6 +40,8 @@ Two of the inverters on the 74LS04 are cross-connected to form an RC-timed clock
 A third inverter acts as a buffer to distribute the clock signal to the Z80 CPU and the Z80 PIO.
 The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
+![80-280 clock generator](/image/Z80_SBC_clock_generator.PNG "Z80 SBC Clock Generator")
+
 ### On-board Power-on Auto-Reset
 
 The board I have did not include the capacitor for the power-on auto-reset circuit.
@@ -45,6 +49,8 @@ I was left to conjecture what its value might be.
 The 10&mu;F value I put on the schematic, based on documentation for John Bell Engineering 80-153 6502 boards,
 matches the value in the documentation for the 80-280 board,
 which was made available online recently in an ebay post.
+
+![80-280 on-board power-on auto-reset](/image/Z80_SBC_on-board_auto-reset.PNG "Z80 SBC On-board Power-on Auto-Reset")
 
 I have not yet tested what delay the combination of 4.7K&ohm; and 10&mu;F provides.
 The RC circuit applies a rising exponential 1-e<sup>-t/RC</sup> to the Z80 /RESET input.

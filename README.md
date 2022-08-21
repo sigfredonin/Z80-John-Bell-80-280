@@ -30,6 +30,8 @@ provides a cheap power-on auto-reset circuit.
 
 This is pretty close to a minimal Z80 computer.
 
+![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic.PNG "Z80 SBC Schematic")
+
 ### Clock Generator
 
 Two of the inverters on the 74LS04 are cross-connected to form an RC-timed clock generator circuit.

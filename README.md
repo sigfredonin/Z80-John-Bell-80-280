@@ -161,13 +161,34 @@ The EPROM reader, which I built with 3 shift register ICs on a solderless breadb
 and a short C program on an Arduino compatible micro-controller (a TinyDuino), read the content of
 the 2716 EPROM and wrote it in hexadecimal to the serial terminal emulator on the attached PC.
 From there, I could copy and paste it into a text file.
+This was sufficient for my purposes, since I could convert the hex text to binary with a
+separate program, if I needed to.
+
+### EPROM Reader Circuit
+
+The EPROM reader circuit comprises three shift registers.
+
+A 4-bit shift register holds the high order 3 bits of the address,
+An 8-bit shift register holds the low order 8 bits of the address.
+They are wired to form a 12-bit address register.
+
+Another 8-bit shift register holds the data read from the EPROM.
+
+The connections to the TinyDuino microcontroller are in three groups:
+
+| Address Register Controls | Data Register Controls   | EPROM Controls      |
+| ------------------------- | ------------------------ | ------------------- |
+| CLKA : Shift right 1 bit  | CLKD : Shift right 1 bit | /CE : Chip enable   |
+| Dso  : Serial data out    | Dsi  : Serial data in    | /OE : Output enable |
+|                           | LDE  : Parallel load     |                     |
+
+A ground connection provides a common signal reference between the TinyDuino and
+the EPROM reader circuit.
+The two are powered by separate 5 volt supplies.
 
 | [2716 EPROM Reader - schematic &rightarrow;](/image/TinyDuino_MK2716_EPROM_Reader.pdf) |
 |----------------------------------------------------------- |
 ![2716 EPROM Reader - schematic](/image/EPROM_2716_Reader_schematic_big.png "2716 EPROM Reader")
-
-This was sufficient for my purposes, since I could convert the hex text to binary with a
-separate program, if I needed to.
 
 ### EPROM Content
 

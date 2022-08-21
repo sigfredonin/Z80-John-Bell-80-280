@@ -32,7 +32,7 @@ provides a cheap power-on auto-reset circuit.
 This is pretty close to a minimal Z80 computer.
 | [80-280 Z80 Computer John Bell Engineering 1980 - schematic &rightarrow;](/image/Z80_SBC_80-280_schematic.pdf) |
 |----------------------------------------------------------- |
-![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic.PNG "Z80 SBC Schematic")
+![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic_big.PNG "Z80 SBC Schematic")
 
 ### Clock Generator
 
@@ -164,7 +164,7 @@ From there, I could copy and paste it into a text file.
 
 | [2716 EPROM Reader - schematic &rightarrow;](/image/TinyDuino_MK2716_EPROM_Reader.pdf) |
 |----------------------------------------------------------- |
-![2716 EPROM Reader - schematic](/image/EPROM_2716_Reader_schematic.png "2716 EPROM Reader")
+![2716 EPROM Reader - schematic](/image/EPROM_2716_Reader_schematic_big.png "2716 EPROM Reader")
 
 This was sufficient for my purposes, since I could convert the hex text to binary with a
 separate program, if I needed to.

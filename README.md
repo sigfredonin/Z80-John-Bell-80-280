@@ -34,6 +34,12 @@ This is pretty close to a minimal Z80 computer.
 |----------------------------------------------------------- |
 ![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic_big.PNG "Z80 SBC Schematic")
 
+|       | Address range                                                          |         | Jumper connections                              |
+| ----- | ---------------------------------------------------------------------- | ------- | ----------------------------------------------- |
+| EPROM | 0000-07FF (2716x1: 2Kx8); 0000-0FFF (2532x1 4Kx8)                      | 32-C-16 | 32-C: 2532 EPROM; C-16: 2716 EPROM              |
+| RAM   | FC00-FFFF (2114x2: 1Kx8)                                               | INT-INT | /INTREQ-/INT: PIO /INTREQ &rightarrow; CPU /INT |
+| PIO   | 00: Port A Data; 01 Port B Data; 02: Port A Control; 03 Port B Control | INT-NMI | /INTREQ-/NMI: PIO /INTREQ &rightarrow; CPU /NMI |
+
 ### Clock Generator
 
 Two of the inverters on the 74LS04 are cross-connected to form an RC-timed clock generator circuit.
@@ -164,16 +170,20 @@ From there, I could copy and paste it into a text file.
 This was sufficient for my purposes, since I could convert the hex text to binary with a
 separate program, if I needed to.
 
+| [2716 EPROM Reader - breadboard &rightarrow;](/image/TinyDuino_MK2716_EPROM_Reader-Connected_to_processor.JPG) |
+|----------------------------------------------------------- |
+![2716 EPROM Reader - breadboard](/image/TinyDuino_MK2716_EPROM_Reader-connected.PNG "2716 EPROM Reader breadboard connected")
+
 ### EPROM Reader Circuit
 
-The EPROM reader circuit comprises three shift registers.
+The EPROM reader circuit comprises three shift registers connected to the EPROM to be read.
 
-A 4-bit shift register holds the high order 3 bits of the address.
-An 8-bit shift register holds the low order 8 bits of the address.
+A 74LS95 4-bit shift register holds the high order bits of the address.
+A 74LS299 8-bit shift register holds the low order bits of the address.
 They are wired together to form a 12-bit address register,
 and provide the 2716 EPROM with the 11 address bits it requires.
 
-Another 8-bit shift register holds the data read from the EPROM.
+Another 74LS299 8-bit shift register holds the data read from the EPROM.
 
 The connections to the TinyDuino microcontroller are in three groups:
 

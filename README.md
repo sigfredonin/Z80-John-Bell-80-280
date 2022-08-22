@@ -34,6 +34,12 @@ This is pretty close to a minimal Z80 computer.
 |----------------------------------------------------------- |
 ![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic_big.PNG "Z80 SBC Schematic")
 
+|       | Address range                                                          |         | Jumper connections                              |
+| ----- | ---------------------------------------------------------------------- | ------- | ----------------------------------------------- |
+| EPROM | 0000-07FF (2716x1: 2Kx8); 0000-0FFF (2532x1 4Kx8)                      | 32-C-16 | 32-C: 2532 EPROM; C-16: 2716 EPROM              |
+| RAM   | FC00-FFFF (2114x2: 1Kx8)                                               | INT-INT | /INTREQ-/INT: PIO /INTREQ &rightarrow; CPU /INT |
+| PIO   | 00: Port A Data; 01 Port B Data; 02: Port A Control; 03 Port B Control | INT-NMI | /INTREQ-/NMI: PIO /INTREQ &rightarrow; CPU /NMI |
+
 ### Clock Generator
 
 Two of the inverters on the 74LS04 are cross-connected to form an RC-timed clock generator circuit.
@@ -42,7 +48,14 @@ The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
 ![80-280 clock generator](/image/Z80_SBC_clock_generator.PNG "Z80 SBC Clock Generator")
 
-### On-board Power-on Auto-Reset
+### CPU Reset
+
+The 80-280 board includes provisions to signal the CPU to reset:
+it provides an optional on-board power-on auto-reset, and
+it routes the CPU /RESET signal to the card edge connector
+so that the user can implement off-board reset circuitry.
+
+#### On-board Power-on Auto-Reset
 
 The board I have did not include the capacitor for the power-on auto-reset circuit.
 I was left to conjecture what its value might be.
@@ -53,7 +66,8 @@ which was made available online recently in an ebay post.
 ![80-280 on-board power-on auto-reset](/image/Z80_SBC_on-board_auto-reset.PNG "Z80 SBC On-board Power-on Auto-Reset")
 
 I have not yet tested what delay the combination of 4.7K&ohm; and 10&mu;F provides.
-The RC circuit applies a rising exponential 1-e<sup>-t/RC</sup> to the Z80 /RESET input.
+The RC circuit applies a rising exponential 1&#x2011;e<sup>&#x2011;t/RC</sup>
+to the Z80 /RESET input.
 If the Z80 /RESET input threshold matches TTL specifications
 (V<sub>L</sub> &leq; 0.8 volts, 2.0 volts &leq; V<sub>H</sub>),
 then R=4.7K&ohm;, C=10&mu;F, provides a /RESET low signal between 8.2 and 24 milliseconds long from power on,
@@ -75,7 +89,7 @@ Delay = -ln(1-(2/5))RC seconds
 To confirm the estimate, I would have to measure the delay from power-on to the first /M1 pulse,
 using measured resistor and capacitor values.
 
-### External Power-on Auto-Reset
+#### External Power-on Auto-Reset
 
 The John Bell Engineering documentation recommends an external power-on auto-reset
 circuit based on a 555 Timer IC.  The 555 Timer has precisely specified thresholds at 1/3 and 2/3 Vcc,
@@ -86,7 +100,7 @@ The recommended circuit uses R=1M&ohm;, C=0.1&mu;F, for a delay of 110 milliseco
 
 Note that the recommended circuit connects the capacitor between Vcc and pins 2 and 6,
 and the resistor between pins 2 and 6 and ground.
-The input to pins 2 and 6 is a decaying exponential e<sup>-t/RC</sup> that begins at Vcc and drops to ground,
+The input to pins 2 and 6 is a decaying exponential e<sup>&#x2011;t/RC</sup> that begins at Vcc and drops to ground,
 because the capacitor has no charge when power is applied.
 The circuit takes the /RESET signal from pin 7, the discharge pin, and uses the 4.7K&ohm; on the board
 as a pull-up resistor.
@@ -105,15 +119,23 @@ added to a 1% accuracy in the 555 timing and a &plusmn;4% variance in the 555 th
 
 When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not installed on the board.
 
-### How Long Should Power-on /RESET be?
+#### Manual Reset
 
-The Z80 CPU documentation shows an example reset circuit that includes a power-on auto-reset feature,
-implemented with an R=10K&ohm;, C=68&mu;F rising exponential delay 1-e<sup>-t/RC</sup>,
-and a 74132 schmitt trigger gate with a nominal rising voltage threshold of 1.7 volts.
+The Z80 CPU documentation shows an example reset circuit that includes
+a manual reset, an external reset, and a power-on auto-reset.
 
 ![Z80 reset circuit recommended in Z80 datasheet](/image/Recommended_Z80_Reset_Circuit_from_CPU_datasheet.PNG "Z80 datasheet auto-reset")
 
-That circuit should provide a delay of about 1/3 second:
+The manual and external resets are synchronized to the CPU M1 signal
+and converted to a pulse with a one-shot circuit,
+in order to avoid losing the content of dynamic memory.
+This is not needed for static RAM.
+
+The auto-reset uses a 10K&ohm; resistor and a 68&mu;F capacitor to
+generate a rising exponential 1&#x2011;e<sup>&#x2011;t/RC</sup>
+as input to a 74132 schmitt trigger gate with a nominal rising voltage threshold of 1.7 volts.
+
+The auto-reset circuit should provide a delay of about 1/4 to 1/3 second from power on:
 
 Delay = -ln(1-(1.7/5))RC seconds  
       = 0.415515(10 &times; 10<sup>3</sup>)(68 &times; 10<sup>-6</sup>) seconds  
@@ -121,10 +143,14 @@ Delay = -ln(1-(1.7/5))RC seconds
       = 282.551 &times; 10<sup>-3</sup> seconds  
       = 282.551 milliseconds  
 
+#### How Long Should Power-on /RESET be?
+
 The on-board power-on auto-reset circuit would provide between 8.2 and 24 milliseconds
 (if my calculations are correct; a test with a 7404 inverter measured ~8 milliseconds).
 
 The recommended external 555 Timer circuit provides a 110 millisecond delay.
+
+The sample reset circuit in the CPU Technical Manual provides a delay of 1/4 to 1/3 second.
 
 What's appropriate?
 
@@ -164,16 +190,20 @@ From there, I could copy and paste it into a text file.
 This was sufficient for my purposes, since I could convert the hex text to binary with a
 separate program, if I needed to.
 
+| [2716 EPROM Reader - breadboard &rightarrow;](/image/TinyDuino_MK2716_EPROM_Reader-Connected_to_processor.JPG) |
+|----------------------------------------------------------- |
+![2716 EPROM Reader - breadboard](/image/TinyDuino_MK2716_EPROM_Reader-connected.PNG "2716 EPROM Reader breadboard connected")
+
 ### EPROM Reader Circuit
 
-The EPROM reader circuit comprises three shift registers.
+The EPROM reader circuit comprises three shift registers connected to the EPROM to be read.
 
-A 4-bit shift register holds the high order 3 bits of the address.
-An 8-bit shift register holds the low order 8 bits of the address.
+A 74LS95 4-bit shift register holds the high order bits of the address.
+A 74LS299 8-bit shift register holds the low order bits of the address.
 They are wired together to form a 12-bit address register,
 and provide the 2716 EPROM with the 11 address bits it requires.
 
-Another 8-bit shift register holds the data read from the EPROM.
+Another 74LS299 8-bit shift register holds the data read from the EPROM.
 
 The connections to the TinyDuino microcontroller are in three groups:
 

@@ -66,7 +66,8 @@ which was made available online recently in an ebay post.
 ![80-280 on-board power-on auto-reset](/image/Z80_SBC_on-board_auto-reset.PNG "Z80 SBC On-board Power-on Auto-Reset")
 
 I have not yet tested what delay the combination of 4.7K&ohm; and 10&mu;F provides.
-The RC circuit applies a rising exponential 1-e<sup>-t/RC</sup> to the Z80 /RESET input.
+The RC circuit applies a rising exponential 1&#x2011;e<sup>&#x2011;t/RC</sup>
+to the Z80 /RESET input.
 If the Z80 /RESET input threshold matches TTL specifications
 (V<sub>L</sub> &leq; 0.8 volts, 2.0 volts &leq; V<sub>H</sub>),
 then R=4.7K&ohm;, C=10&mu;F, provides a /RESET low signal between 8.2 and 24 milliseconds long from power on,
@@ -99,7 +100,7 @@ The recommended circuit uses R=1M&ohm;, C=0.1&mu;F, for a delay of 110 milliseco
 
 Note that the recommended circuit connects the capacitor between Vcc and pins 2 and 6,
 and the resistor between pins 2 and 6 and ground.
-The input to pins 2 and 6 is a decaying exponential e<sup>-t/RC</sup> that begins at Vcc and drops to ground,
+The input to pins 2 and 6 is a decaying exponential e<sup>&#x2011;t/RC</sup> that begins at Vcc and drops to ground,
 because the capacitor has no charge when power is applied.
 The circuit takes the /RESET signal from pin 7, the discharge pin, and uses the 4.7K&ohm; on the board
 as a pull-up resistor.
@@ -120,13 +121,21 @@ When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not
 
 #### Manual Reset
 
-The Z80 CPU documentation shows an example reset circuit that includes a power-on auto-reset feature,
-implemented with an R=10K&ohm;, C=68&mu;F rising exponential delay 1-e<sup>-t/RC</sup>,
-and a 74132 schmitt trigger gate with a nominal rising voltage threshold of 1.7 volts.
+The Z80 CPU documentation shows an example reset circuit that includes
+a manual reset, an external reset, and a power-on auto-reset.
 
 ![Z80 reset circuit recommended in Z80 datasheet](/image/Recommended_Z80_Reset_Circuit_from_CPU_datasheet.PNG "Z80 datasheet auto-reset")
 
-That circuit should provide a delay of about 1/4 to 1/3 second:
+The manual and external resets are synchronized to the CPU M1 signal
+and converted to a pulse with a one-shot circuit,
+in order to avoid losing the content of dynamic memory.
+This is not needed for static RAM.
+
+The auto-reset uses a 10K&ohm; resistor and a 68&mu;F capacitor to
+generate a rising exponential 1&#x2011;e<sup>&#x2011;t/RC</sup>
+as input to a 74132 schmitt trigger gate with a nominal rising voltage threshold of 1.7 volts.
+
+The auto-reset circuit should provide a delay of about 1/4 to 1/3 second from power on:
 
 Delay = -ln(1-(1.7/5))RC seconds  
       = 0.415515(10 &times; 10<sup>3</sup>)(68 &times; 10<sup>-6</sup>) seconds  

@@ -3,7 +3,7 @@
 
 | [80-280 component side &rightarrow;](/image/Z80_SBC_Component_Side_Full_Size.JPG) | [80-280 solder side &rightarrow;](/image/Z80_SBC_Component_Solder_Full_Size.JPG) |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| ![80-280 Z80 Computer John Bell Engineering 1980 - component side](/image/Z80_SBC_Component_Side.PNG "Z80 SBC Component Side") | ![80-280 Z80 Computer John Bell Engineering 1980 - solder side](/image/Z80_SBC_Solder_Side.PNG "Z80 SBC Solder Side") |
+| ![80-280 Z80 Computer John Bell Engineering 1980 - component side](/image/Z80_SBC_Component_Side-cropped.jpg "Z80 SBC Component Side") | ![80-280 Z80 Computer John Bell Engineering 1980 - solder side](/image/Z80_SBC_Solder_Side-cropped.jpg "Z80 SBC Solder Side") |
 
 I have a 1980 vintage Z80 single-board computer model 80-280 by John Bell Engineering.
 I wanted to try running it, but to program it I would need to know the addresses of the EPROM, the RAM, and the PIO.
@@ -47,6 +47,17 @@ A third inverter acts as a buffer to distribute the clock signal to the Z80 CPU 
 The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
 ![80-280 clock generator](/image/Z80_SBC_clock_generator.PNG "Z80 SBC Clock Generator")
+
+### Interrupt Request
+
+The Z80 PIO can request an interrupt on completion of an I/O operation by activating its /INTREQ line (pin 23).
+The 80-280 board has provision to optionally route the /INTREQ signal
+to the Z80 CPU's /NMI line (non-maskable interrupt, pin 17)
+or to the Z80 CPU's /INT line (ordinary maskable interrupt, pin 16).
+The through-hole solder lands are 0.1" apart, so pins can be soldered into them
+and a jumper used for the connection, or a jumper wire can be soldered across two of them.
+
+![80-280 Z80 Computer John Bell Engineering 1980 - /INTREQ](/image/Z80_SBC_Component_Side-INTREQ_routing.jpg "Z80 SBC /INTREQ Routing")
 
 ### CPU Reset
 

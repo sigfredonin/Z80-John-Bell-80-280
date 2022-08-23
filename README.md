@@ -34,11 +34,19 @@ This is pretty close to a minimal Z80 computer.
 |----------------------------------------------------------- |
 ![80-280 Z80 Computer John Bell Engineering 1980 - schematic](/image/Z80_SBC_80-280_schematic_big.PNG "Z80 SBC Schematic")
 
-|       | Address range                                                          |         | Jumper connections                              |
-| ----- | ---------------------------------------------------------------------- | ------- | ----------------------------------------------- |
-| EPROM | 0000-07FF (2716x1: 2Kx8); 0000-0FFF (2532x1 4Kx8)                      | 32-C-16 | 32-C: 2532 EPROM; C-16: 2716 EPROM              |
-| RAM   | FC00-FFFF (2114x2: 1Kx8)                                               | INT-INT | /INTREQ-/INT: PIO /INTREQ &rightarrow; CPU /INT |
-| PIO   | 00: Port A Data; 01 Port B Data; 02: Port A Control; 03 Port B Control | INT-NMI | /INTREQ-/NMI: PIO /INTREQ &rightarrow; CPU /NMI |
+|       | Address range                                                          |
+| ----- | ---------------------------------------------------------------------- |
+| EPROM | 0000-07FF (2716: 2Kx8)                                                 |
+|       | 0000-0FFF (2532: 4Kx8)                                                 |
+| RAM   | FC00-FFFF (2114 x 2: 1Kx8)                                             |
+| PIO   | 00: Port A Data; 01 Port B Data; 02: Port A Control; 03 Port B Control |
+
+|              | Jumper connections                |
+| ------------ | --------------------------------- |
+| C-16         | 2516 or 2716 EPROM                |
+| 32-C         | 2532 EPROM                        |
+| /INTREQ-/INT | PIO /INTREQ &rightarrow; CPU /INT |
+| /INTREQ-/NMI | PIO /INTREQ &rightarrow; CPU /NMI |
 
 ### Clock Generator
 
@@ -47,6 +55,36 @@ A third inverter acts as a buffer to distribute the clock signal to the Z80 CPU 
 The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
 ![80-280 clock generator](/image/Z80_SBC_clock_generator.PNG "Z80 SBC Clock Generator")
+
+### EPROM Selection
+
+The 80-280 board includes a jumper to select between a 2Kx8 (16K bit) EPROM and a 4Kx8 (32K bit) EPROM.
+The 2Kx8 EPROM can be a 2516 or 2716 EPROM.
+The 4Kx8 EPROM can be a 2532 EPROM.
+Access time should be 500 nsec or better.
+
+![80-280 EPROM Select](/image/Z80_SBC_Component_Side-2532-2716_jumper-small.PNG "Z80 SBC EPROM Select Jumper")
+
+The 2516 and 2716 EPROMs are pin compatible in read mode in that 
+a low signal on pins 18 and 20 reads the byte at the selected address and presents it on the data pins,
+and a high signal puts the chip in a low-power state and sets the data pins in a high-impedance state.
+The 2532 EPROM requires address bit A11 on pin 18.
+A low signal on pin 20 reads the byte at the selected address and presents it on the data pins,
+and a high signal puts the chip in a low-power state and sets the data pins in a high-impedance state.
+
+![EPROM 2716 pinout](/image/2716_pinout_annotated-tiny.PNG "EPROM 2716 pinout") ![EPROM 2516 pinout](/image/2516_pinout_annotated-tiny.PNG "EPROM 2516 pinout") ![EPROM 2532 pinout](/image/2532_pinout_annotated-tiny.PNG "EPROM 2532 pinout")
+
+When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (= /[/A15 & RD & MREQ]) to both
+pins 18 and 20, appropriate for a 2516 or a 2716 EPROM.
+When the EPROM Selection jumper connects C-32, it routes the EPROM select signal to pin 20, and A11 to pin 18,
+appropriate for a 2532 EPROM.
+
+Note that this will not work for a 2732 EPROM, which requires A11 on pin 21,
+where the other chips have Vpp and require Vcc.
+A 2732 has /G (Output Enable, equivalent to /OE) on pin 20
+and /E (Chip Enable, equivalent to /CE) on pin 18.
+Like the 2716, it requires low signal on pins 18 and 20 to read and present a data byte,
+but instead of a high level on pin 21, it requires A11.
 
 ### Interrupt Request
 
@@ -57,7 +95,7 @@ or to the Z80 CPU's /INT line (ordinary maskable interrupt, pin 16).
 The through-hole solder lands are 0.1" apart, so pins can be soldered into them
 and a jumper used for the connection, or a jumper wire can be soldered across two of them.
 
-![80-280 Z80 Computer John Bell Engineering 1980 - /INTREQ](/image/Z80_SBC_Component_Side-INTREQ_routing.jpg "Z80 SBC /INTREQ Routing")
+![80-280 Z80 Computer John Bell Engineering 1980 - /INTREQ](/image/Z80_SBC_Component_Side-INTREQ_routing-small.PNG "Z80 SBC /INTREQ Routing")
 
 ### CPU Reset
 

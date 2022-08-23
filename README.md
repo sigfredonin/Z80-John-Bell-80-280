@@ -256,11 +256,11 @@ Another 74LS299 8-bit shift register holds the data read from the EPROM.
 
 The connections to the TinyDuino microcontroller are in three groups:
 
-| Address Register Controls | Data Register Controls    | EPROM Controls      |
-| ------------------------- | ------------------------- | ------------------- |
-| CLKA : Shift right 1 bit  | CLKD : Shift right 1 bit  | /CE : Chip enable   |
-| Dso  : Serial data out    | Dsi  : Serial data in     | /OE : Output enable |
-|                           | LDE  : Parallel load mode |                     |
+| Address Register Controls | Data Register Controls      | EPROM Controls      |
+| ------------------------- | --------------------------- | ------------------- |
+| CLKA : Shift right 1 bit  | CLKD : Shift right or load  | /CE : Chip enable   |
+| Dso  : Serial data out    | Dsi  : Serial data in       | /OE : Output enable |
+|                           | LDE  : Parallel load mode   |                     |
 
 A ground connection provides a common signal reference between the TinyDuino and
 the EPROM reader circuit.

@@ -36,7 +36,7 @@ This is pretty close to a minimal Z80 computer.
 
 |       | Address range                                                          |
 | ----- | ---------------------------------------------------------------------- |
-| EPROM | 0000-07FF (2716: 2Kx8)                                                 |
+| EPROM | 0000-07FF (2516, 2716: 2Kx8)                                                 |
 |       | 0000-0FFF (2532: 4Kx8)                                                 |
 | RAM   | FC00-FFFF (2114 x 2: 1Kx8)                                             |
 | PIO   | 00: Port A Data; 01 Port B Data; 02: Port A Control; 03 Port B Control |

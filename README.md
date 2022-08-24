@@ -54,7 +54,7 @@ Two of the inverters on the 74LS04 are cross-connected to form an RC-timed clock
 A third inverter acts as a buffer to distribute the clock signal to the Z80 CPU and the Z80 PIO.
 The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
-![80-280 clock generator](/image/Z80_SBC_clock_generator.PNG "Z80 SBC Clock Generator")
+![80-280 clock generator](/image/Z80_SBC_clock_generator_BW.jpg "Z80 SBC Clock Generator") ![80-280 clock trace](/image/Z80_SBC_Clock_Trace.PNG "Z80 SBC Clock Trace")
 
 ### EPROM Selection
 

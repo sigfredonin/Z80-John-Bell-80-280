@@ -76,7 +76,7 @@ and a high signal puts the chip in a low-power state and sets the data pins in a
 
 ![EPROM 2516 pinout](/image/2516_pinout_annotated-tiny.PNG "EPROM 2516 pinout") ![EPROM 2532 pinout](/image/2532_pinout_annotated-tiny.PNG "EPROM 2532 pinout")
 
-When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (= /[/A15&nbsp;&&nbsp;RD&nbsp;&&nbsp;MREQ]) to both
+When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (=&nbsp;/[/A15&nbsp;&&nbsp;RD&nbsp;&&nbsp;MREQ]) to both
 pins 18 and 20, appropriate for a 2516 or a 2716 EPROM.
 When the EPROM Selection jumper connects C-32, it routes the EPROM select signal to pin 20, and A11 to pin 18,
 appropriate for a 2532 EPROM.

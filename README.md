@@ -72,7 +72,9 @@ The 2532 EPROM requires address bit A11 on pin 18.
 A low signal on pin 20 reads the byte at the selected address and presents it on the data pins,
 and a high signal puts the chip in a low-power state and sets the data pins in a high-impedance state.
 
-![EPROM 2716 pinout](/image/2716_pinout_annotated-tiny.PNG "EPROM 2716 pinout") ![EPROM 2516 pinout](/image/2516_pinout_annotated-tiny.PNG "EPROM 2516 pinout") ![EPROM 2532 pinout](/image/2532_pinout_annotated-tiny.PNG "EPROM 2532 pinout")
+![EPROM 2716 pinout](/image/2716_pinout_annotated-tiny.PNG "EPROM 2716 pinout") ![EPROM 2732 pinout](/image/2732_pinout_annotated-tiny.PNG "EPROM 2732 pinout")
+
+![EPROM 2516 pinout](/image/2516_pinout_annotated-tiny.PNG "EPROM 2516 pinout") ![EPROM 2532 pinout](/image/2532_pinout_annotated-tiny.PNG "EPROM 2532 pinout")
 
 When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (= /[/A15 & RD & MREQ]) to both
 pins 18 and 20, appropriate for a 2516 or a 2716 EPROM.

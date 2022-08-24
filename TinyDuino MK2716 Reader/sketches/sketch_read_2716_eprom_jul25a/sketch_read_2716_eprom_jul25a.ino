@@ -1,5 +1,5 @@
 /*
- * TinyDuino MK2716T EPROM Reader - Shift Register Test
+ * TinyDuino MK2716T EPROM Reader
  * 
  * The MK2716T EPROM Reader consists of an SN74LS95 shift
  * register to hold the high order 4 bits of a 12 bit address, 
@@ -14,10 +14,12 @@
  * the data register, then shifts the data byte into the
  * TinyDuino, low order bit first.
  * 
- * This reader sketch reads all the EPROM content, 16 bytes at a time,
+ * This reader sketch reads all of the EPROM content, 16 bytes at a time,
  * and writes the offset and the bytes in hex to the serial terminal.
+ * When it is done, it lights up the TinyDuino's LEDs in a back and forth
+ * sweep pattern.
  *
- * 2022 Juy 17
+ * 2022 July 17
  * Sigfredo I. Nin
  * signin@email.com
  */
@@ -74,18 +76,18 @@ void loadAddressRegister(unsigned int address) {
 void readEPROM() {
   digitalWrite(LDE, HIGH);  // Set Data Register to LOAD mode
   delay(delaymsecs);
-  digitalWrite(_CE, LOW);   // Enable EEPROM
+  digitalWrite(_CE, LOW);   // Enable EPROM
   delay(delaymsecs);
   delay(delaymsecs);
-  digitalWrite(_OE, LOW);   // Enable EEPROM output
+  digitalWrite(_OE, LOW);   // Enable EPROM output
   delay(delaymsecs);
   digitalWrite(CLKD, HIGH); // Clock data into Data Register
   delay(delaymsecs);
   digitalWrite(CLKD, LOW);
   delay(delaymsecs);
-  digitalWrite(_OE, HIGH);  // Disable EEPROM output
+  digitalWrite(_OE, HIGH);  // Disable EPROM output
   delay(delaymsecs);
-  digitalWrite(_CE, HIGH);  // Disable EEPROM
+  digitalWrite(_CE, HIGH);  // Disable EPROM
   delay(delaymsecs);
   // Exit with LDE=HIGH, _CE=HIGH, _OE=LOW, CLKD=LOW
 }

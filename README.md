@@ -169,6 +169,8 @@ Delay = -ln(1/3)RC seconds
 
 The uncertainty in this calculation comes from the resistor and capacitor tolerances,
 added to a 1% accuracy in the 555 timing and a &plusmn;4% variance in the 555 threshold.
+Because the rise time of the 555 output is only ~100 nsec << reset signal time,
+the uncertainty in the delay is not much affected by the response of the Z80 /RESET input.
 
 When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not installed on the board.
 

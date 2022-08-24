@@ -76,7 +76,7 @@ and a high signal puts the chip in a low-power state and sets the data pins in a
 
 ![EPROM 2516 pinout](/image/2516_pinout_annotated-tiny.PNG "EPROM 2516 pinout") ![EPROM 2532 pinout](/image/2532_pinout_annotated-tiny.PNG "EPROM 2532 pinout")
 
-When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (= /[/A15 & RD & MREQ]) to both
+When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (= /[/A15&nbsp;&&nbsp;RD&nbsp;&&nbsp;MREQ]) to both
 pins 18 and 20, appropriate for a 2516 or a 2716 EPROM.
 When the EPROM Selection jumper connects C-32, it routes the EPROM select signal to pin 20, and A11 to pin 18,
 appropriate for a 2532 EPROM.
@@ -114,17 +114,19 @@ The 10&mu;F value I put on the schematic, based on documentation for John Bell E
 matches the value in the documentation for the 80-280 board,
 which was made available online recently in an ebay post.
 
-![80-280 on-board power-on auto-reset](/image/Z80_SBC_on-board_auto-reset.PNG "Z80 SBC On-board Power-on Auto-Reset")
+
+![80-280 on-board power-on auto-reset](/image/Z80_SBC_on-board_auto-reset_BW.png "Z80 SBC On-board Power-on Auto-Reset") ![TTL response to RC input](/image/7404_Inverter_Response_to_RC_Input-trimmed-small.PNG "TTL response to RC input - scope trace")  ![CMOS response to RC input](/image/CD4049AE_CMOS_Inverter_Buffer_Response_to_RC_Input-trimmed-small.PNG "CMOS response to RC input - scope trace")
 
 I have not yet tested what delay the combination of 4.7K&ohm; and 10&mu;F provides.
 The RC circuit applies a rising exponential 1&#x2011;e<sup>&#x2011;t/RC</sup>
 to the Z80 /RESET input.
 If the Z80 /RESET input threshold matches TTL specifications
-(V<sub>L</sub> &leq; 0.8 volts, 2.0 volts &leq; V<sub>H</sub>),
+(V<sub>IL</sub> &leq; 0.8 volts, 2.0 volts &leq; V<sub>IH</sub>),
 then R=4.7K&ohm;, C=10&mu;F, provides a /RESET low signal between 8.2 and 24 milliseconds long from power on,
 without considering typical resistor (5%) and electrolytic capacitor (20%) tolerances.
+If the Z80 responds like a CMOS gate, the delay might be very different.
 
-The delays are calculated as:
+The delays, assuming TTL responses, are calculated as:
 
 Delay = -ln(1-(0.8/5))RC seconds  
       = 0.174353(4.7 &times; 10<sup>3</sup>)(10 &times; 10<sup>-6</sup>) seconds  
@@ -273,6 +275,8 @@ The two are powered by separate 5 volt supplies.
 ![2716 EPROM Reader - schematic](/image/EPROM_2716_Reader_schematic_big.png "2716 EPROM Reader")
 
 ### EPROM Reader Circuit Operation
+
+[2716 EPROM Reader - Arduino sketch &rightarrow;](/sketches/sketch_read_2716_eprom_jul25a/sketch_read_2716_eprom_jul25a.ino)
 
 To operate the EPROM reader circuit, the TinyDuino manipulates the control lines to
 shift an address into the address register, cause the 2716 EPROM to read the byte at

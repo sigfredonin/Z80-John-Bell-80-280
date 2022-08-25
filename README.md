@@ -290,6 +290,56 @@ the system is the PIO ports, the user can choose to program a delay or a handsha
 to verify system readiness.
 The power-on auto-reset circuit does not have to provide all of the needed delay.
 
+### Unused Z80 CPU and Z80 PIO Features
+
+The Z80 CPU and the Z80 PIO have features that this board does not enable.
+Unused inputs are tied to a high logic level (inactive) through
+a 4.7K&ohm; resistor to Vcc.
+Unused outputs are not connected.
+
+#### Direct Memory Access (DMA)
+
+The Z80 CPU will cede control of the bus to other devices
+to allow them direct access to memory or I/O devices.
+The low signal /BUSRQ input causes the Z80 CPU to set the address bus, the data bus,
+and the control signals /MREQ, /IOREQ, /RD, /WR to a high impedance state
+at the end of the current machine cycle.
+The CPU signals that it has ceded the bus by activating the /BUSAK signal.
+
+The board ties CPU pin 25 /BUSRQ to Vcc through 4.7K&ohm; resistor,
+and leaves CPU pin 23 /BUSAK unconnected.
+
+#### Halt State
+
+The Z80 CPU indicates that it is halted, as a result of executing a HALT instruction,
+by activating the /HALT signal.
+The CPU will remain in the HALT state until it receives a non-maskable interrupt
+or an unmasked maskable interrupt.
+
+The board leaves CPU pin 18 /HALT unconnected.
+
+#### Memory Refresh
+
+The Z80 CPU uses the T3 and T4 clock states of an M1 instruction fetch cycle
+to refresh dynamic memories.
+It activates the /RFSH signal to indicate that the address bus has a refresh address.
+
+The board does not have any dynamic RAMs, so it leaves CPU pin 28 /RFSH unconnected.
+
+#### Interrupt Priority Chaining
+
+The Z80 PIO can participate in interrupt priority logic using the 
+IEI interrupt enable input and the IEO interrupt enable output signals.
+The PIO will generate a pending interrupt request if IEI is high,
+meaning no higher priority device is interrupting the CPU.
+The PIO will generate a high signal on the IEO output if it
+does not need to interrupt the CPU, enabling lower priority devices
+to do so.
+
+The board does not have any devices besides the PIO that can interrupt the CPU,
+so it ties PIO pin 24 IEI to Vcc through 4.7K&ohm; resistor,
+and leaves PIO pin 22 IEO unconnected.
+
 ## TEST 1 EPROM
 
 The board I have came with a 2716 EPROM labelled TEST 1.

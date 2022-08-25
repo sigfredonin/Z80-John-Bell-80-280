@@ -150,6 +150,16 @@ No reasonable programmer (by definition!) will use them.
 But being aware of the aliasing could help
 in understanding the behavior of a malfunctioning program.
 
+A simple example of a program that accesses aliased memory is
+one that tries to use more stack space than is available.
+When stack pointer drops below the beginning of the RAM space,
+it will wrap to the top of RAM and overwrite the data there,
+probably the bottom of the stack.
+The program will not malfunction until it pops the corrupted
+stack data, perhaps much later.
+An easy way for this to happen is for a recursive subroutine
+to recurse too far.
+
 ### Interrupt Request
 
 The Z80 PIO can request an interrupt on completion of an I/O operation by activating its /INTREQ line (pin 23).

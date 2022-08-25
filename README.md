@@ -86,6 +86,17 @@ The EPROM is addressed if A15 = 0, and both /RD and /MREQ are active.
 
 ![EPROM Address Decoding](/image/Z80_SBC_Address_Decoding_EPROM_annotated-small.PNG "EPROM Address Selection - schematic")
 
+#### About A15 ...
+
+The Z80 output pins are rated to drive one TTL load.
+A15 is connected to 3:
+one in the EPROM address decode logic, and
+two in the RAM address decode logic.
+This could have been avoided by inverting /A15 from the
+EPROM address decode logic using the unused NAND gate U6A.
+This would cost one gate more gate delay,
+but that's unlikely to cause any problems or slow down memory access.
+
 #### EPROM Type Selection
 
 The 80-280 board includes a jumper to select between a 2Kx8 (16K bit) EPROM and a 4Kx8 (32K bit) EPROM.

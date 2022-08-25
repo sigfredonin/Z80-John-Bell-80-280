@@ -171,6 +171,14 @@ EPROM address decode logic using the unused NAND gate U6A.
 This would cost one gate more gate delay,
 but that's unlikely to cause any problems or slow down memory access.
 
+However ...
+
+The use of Low Power Schottky TTL devices eliminates this potential problem.
+Whereas a standard TTL input requires the driver to sink 1.6 mA for a low logic level,
+Low Power Schottky TTL only requires 0.4 mA.
+The Z80 outputs can sink 1.8 mA when at a low logic level,
+sufficient for one standard TTL input, but enough for 4 Low Power Schottky TTL inputs.
+
 ### Interrupt Request
 
 The Z80 PIO can request an interrupt on completion of an I/O operation by activating its /INTREQ line (pin 23).

@@ -163,7 +163,13 @@ to recurse too far.
 #### About A15 ...
 
 The Z80 output pins are rated to drive one TTL load.
-A15 is connected to 3:
+Most of the Z80 CPU outputs drive the inputs of
+the Z80 PIO, the EPROM, and the two 2114 RAM chips,
+all of which are rated at 10&mu;A << 1 TTL load.
+/MREQ and /RD also drive one input to the EPROM address decode logic.
+These are all easily within the capability of the Z80 outputs.
+
+A15, though, is connected to 3:
 one in the EPROM address decode logic, and
 two in the RAM address decode logic.
 This could have been avoided by inverting /A15 from the

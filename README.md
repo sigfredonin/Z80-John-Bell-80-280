@@ -62,6 +62,18 @@ Address decoding for the EPROM and RAM is provided by random logic using gates i
 the 74LS04 Inverter and the 74LS10 Triple 3-Input NAND chips.
 Address decoding for the Z80 PIO is done on-chip.
 
+#### PIO Address Decoding
+
+The Z80 PIO uses 4 I/O addresses selected by inputs
+
+- pin 4: /CE Chip Enable (Low signal selects the chip)
+- pin 5: C/D Data / Control (Low signal selects data)
+- pin 6: B/A Port select (Low signal selects Port A)
+
+The 80-280 board routes /IORQ to the PIO /CE input, since it is the only I/O device.
+It routes A0 to the PIO port select input, and A1 to the Data/Control select input.
+No external logic is needed.
+
 #### RAM Address Decoding
 
 The RAM is addressed if A15 = 1, and /MREQ is active.
@@ -105,6 +117,38 @@ A 2732 has /G (Output Enable, equivalent to /OE) on pin 20
 and /E (Chip Enable, equivalent to /CE) on pin 18.
 Like the 2716, it requires low signal on pins 18 and 20 to read and present a data byte,
 but instead of a high level on pin 21, it requires A11.
+
+#### Address Aliasing
+
+Note that the board logic enables addressing the correct devices
+for the *defined address ranges* on the board.
+
+The RAM is selected if A15=1.
+A9..A0 select a byte within the RAM;
+the values of A14..A10 are ignored.
+
+Similarly, the EPROM is selected if A15=0.
+When a 2K EPROM is used, A10..A0 select a byte within the EPROM;
+the values of A14..A11 are ignored.
+When a 4K EPROM is used, A11..A0 select a byte within the EPROM;
+the values of A14..A12 are ignored.
+
+Again similarly, the PIO is selected whenever /IORQ is active.
+A1..A0 select the PIO data or control port operated on;
+the values of A7..A0 are ignored 
+(A15..A9 are not used for I/O addressing - the I/O instructions
+cannot specify them).
+
+Because the board logic ignores address bits not necessary to
+address the defined ranges, from the program's viewpoint the
+address ranges are aliased: the program can specify any value
+for the ignored address bits.
+It can, for example, address PIO port A control at address F2
+instead of 02.
+Ordinarily the aliasing does not matter.
+No reasonable programmer (by definition!) will use them.
+But being aware of the aliasing could help
+in understanding the behavior of a malfunctioning program.
 
 ### Interrupt Request
 

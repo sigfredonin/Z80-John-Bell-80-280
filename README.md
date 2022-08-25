@@ -162,7 +162,7 @@ to recurse too far.
 
 #### About A15 ...
 
-The Z80 output pins are rated to drive one TTL load.
+The Z80 output pins are rated to drive one standard TTL load.
 Most of the Z80 CPU outputs drive the inputs of
 the Z80 PIO, the EPROM, and the two 2114 RAM chips,
 all of which are rated at 10&mu;A << 1 TTL load.

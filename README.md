@@ -56,7 +56,25 @@ The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
 ![80-280 clock generator](/image/Z80_SBC_clock_generator_BW.jpg "Z80 SBC Clock Generator") ![80-280 clock trace](/image/Z80_SBC_Clock_Trace.PNG "Z80 SBC Clock Trace")
 
-### EPROM Selection
+### Address Decoding
+
+Address decoding for the EPROM and RAM is provided by random logic using gates in
+the 74LS04 Inverter and the 74LS10 Triple 3-Input NAND chips.
+Address decoding for the Z80 PIO is done on-chip.
+
+#### RAM Address Decoding
+
+The RAM is addressed if A15 = 1, and /MREQ is active.
+
+![RAM Address Decoding](/image/Z80_SBC_Address_Decoding_RAM_annotated.png "RAM Address Selection - schematic")
+
+#### EPROM Address Decoding
+
+The EPROM is addressed if A15 = 0, and both /RD and /MREQ are active.
+
+![EPROM Address Decoding](/image/Z80_SBC_Address_Decoding_EPROM_annotated-small.PNG "EPROM Address Selection - schematic")
+
+#### EPROM Type Selection
 
 The 80-280 board includes a jumper to select between a 2Kx8 (16K bit) EPROM and a 4Kx8 (32K bit) EPROM.
 The 2Kx8 EPROM can be a 2516 or 2716 EPROM.

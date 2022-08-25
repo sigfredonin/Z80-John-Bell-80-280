@@ -76,7 +76,7 @@ and a high signal puts the chip in a low-power state and sets the data pins in a
 
 ![EPROM 2516 pinout](/image/2516_pinout_annotated-tiny.PNG "EPROM 2516 pinout") ![EPROM 2532 pinout](/image/2532_pinout_annotated-tiny.PNG "EPROM 2532 pinout")
 
-When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (= /[/A15&nbsp;&&nbsp;RD&nbsp;&&nbsp;MREQ]) to both
+When the EPROM Selection jumper connects 16-C, it routes the EPROM select signal (=&nbsp;/[/A15&nbsp;&&nbsp;RD&nbsp;&&nbsp;MREQ]) to both
 pins 18 and 20, appropriate for a 2516 or a 2716 EPROM.
 When the EPROM Selection jumper connects C-32, it routes the EPROM select signal to pin 20, and A11 to pin 18,
 appropriate for a 2532 EPROM.
@@ -169,6 +169,8 @@ Delay = -ln(1/3)RC seconds
 
 The uncertainty in this calculation comes from the resistor and capacitor tolerances,
 added to a 1% accuracy in the 555 timing and a &plusmn;4% variance in the 555 threshold.
+Because the rise time of the 555 output is only ~100 nsec << reset signal time,
+the uncertainty in the delay is not much affected by the response of the Z80 /RESET input.
 
 When using an external power-on auto-reset circuit, the 10&mu;F capacitor is not installed on the board.
 

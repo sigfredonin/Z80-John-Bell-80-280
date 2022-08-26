@@ -220,7 +220,7 @@ to the Z80 /RESET input.
 If the Z80 /RESET input threshold matches TTL specifications
 (V<sub>IL</sub> &leq; 0.8 volts, 2.0 volts &leq; V<sub>IH</sub>),
 then R=4.7K&ohm;, C=10&mu;F, provides a /RESET low signal between 8.2 and 24 milliseconds long from power on,
-without considering typical resistor (5%) and electrolytic capacitor (20%) tolerances.
+calculated without considering typical resistor (5%) and electrolytic capacitor (20%) tolerances.
 If the Z80 responds like a CMOS gate, the delay might be very different.
 
 The delays, assuming TTL responses, are calculated as:

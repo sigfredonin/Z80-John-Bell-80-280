@@ -166,7 +166,7 @@ The Z80 output pins are rated to drive one standard TTL load.
 Most of the Z80 CPU outputs drive the inputs of
 the Z80 PIO, the EPROM, and the two 2114 RAM chips,
 all of which are rated at 10&mu;A << 1 TTL load.
-/MREQ and /RD also drive one input to the EPROM address decode logic.
+/MREQ and /RD each also drive one input to the EPROM address decode logic.
 These are all easily within the capability of the Z80 outputs.
 
 A15, though, is connected to 3:
@@ -174,7 +174,7 @@ one in the EPROM address decode logic, and
 two in the RAM address decode logic.
 This could have been avoided by inverting /A15 from the
 EPROM address decode logic using the unused NAND gate U6A.
-This would cost one gate more gate delay,
+This would cost one more gate delay,
 but that's unlikely to cause any problems or slow down memory access.
 
 However ...

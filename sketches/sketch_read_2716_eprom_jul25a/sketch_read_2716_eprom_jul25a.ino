@@ -210,7 +210,6 @@ void setup() {
 }
 
 unsigned int byteAddress = 0;
-unsigned int byteCount = 0;
 unsigned char data[16];
 void loop() {
   // Read 16 bytes at a time ...

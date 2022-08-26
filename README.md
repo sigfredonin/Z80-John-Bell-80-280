@@ -124,20 +124,20 @@ Note that the board logic enables addressing the correct devices
 for the *defined address ranges* on the board.
 
 The RAM is selected if A15=1.
-A9..A0 select a byte within the RAM;
+Address bits A9..A0 select a byte within the RAM;
 the values of A14..A10 are ignored.
 
 Similarly, the EPROM is selected if A15=0.
-When a 2K EPROM is used, A10..A0 select a byte within the EPROM;
+When a 2K EPROM is used, address bits A10..A0 select a byte within the EPROM;
 the values of A14..A11 are ignored.
-When a 4K EPROM is used, A11..A0 select a byte within the EPROM;
+When a 4K EPROM is used, address bits A11..A0 select a byte within the EPROM;
 the values of A14..A12 are ignored.
 
 Again similarly, the PIO is selected whenever /IORQ is active.
-A1..A0 select the PIO data or control port operated on;
-the values of A7..A0 are ignored 
-(A15..A9 are not used for I/O addressing - the I/O instructions
-cannot specify them).
+Address bits A1..A0 select the PIO data or control port operated on;
+the values of A7..A0 are ignored.
+Address bits A15..A9 are not used for I/O addressing
+&mdash; the I/O instructions cannot specify them.
 
 Because the board logic ignores address bits not necessary to
 address the defined ranges, from the program's viewpoint the

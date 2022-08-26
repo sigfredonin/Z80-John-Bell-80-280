@@ -56,7 +56,37 @@ The clock signal is about 1.8 MHz, measured with an oscilloscope.
 
 ![80-280 clock generator](/image/Z80_SBC_clock_generator_BW.jpg "Z80 SBC Clock Generator") ![80-280 clock trace](/image/Z80_SBC_Clock_Trace.PNG "Z80 SBC Clock Trace")
 
-### EPROM Selection
+### Address Decoding
+
+Address decoding for the EPROM and RAM is provided by random logic using gates in
+the 74LS04 Inverter and the 74LS10 Triple 3-Input NAND chips.
+Address decoding for the Z80 PIO is done on-chip.
+
+#### PIO Address Decoding
+
+The Z80 PIO uses 4 I/O addresses selected by inputs
+
+- pin 4: /CE Chip Enable (Low signal selects the chip)
+- pin 5: C/D Data / Control (Low signal selects data)
+- pin 6: B/A Port select (Low signal selects Port A)
+
+The 80-280 board routes /IORQ to the PIO /CE input, since it is the only I/O device.
+It routes A0 to the PIO port select input, and A1 to the Data/Control select input.
+No external logic is needed.
+
+#### RAM Address Decoding
+
+The RAM is addressed if A15 = 1, and /MREQ is active.
+
+![RAM Address Decoding](/image/Z80_SBC_Address_Decoding_RAM_annotated.png "RAM Address Selection - schematic")
+
+#### EPROM Address Decoding
+
+The EPROM is addressed if A15 = 0, and both /RD and /MREQ are active.
+
+![EPROM Address Decoding](/image/Z80_SBC_Address_Decoding_EPROM_annotated-small.PNG "EPROM Address Selection - schematic")
+
+#### EPROM Type Selection
 
 The 80-280 board includes a jumper to select between a 2Kx8 (16K bit) EPROM and a 4Kx8 (32K bit) EPROM.
 The 2Kx8 EPROM can be a 2516 or 2716 EPROM.
@@ -87,6 +117,73 @@ A 2732 has /G (Output Enable, equivalent to /OE) on pin 20
 and /E (Chip Enable, equivalent to /CE) on pin 18.
 Like the 2716, it requires low signal on pins 18 and 20 to read and present a data byte,
 but instead of a high level on pin 21, it requires A11.
+
+#### Address Aliasing
+
+Note that the board logic enables addressing the correct devices
+for the *defined address ranges* on the board.
+
+The RAM is selected if A15=1.
+Address bits A9..A0 select a byte within the RAM;
+the values of A14..A10 are ignored.
+
+Similarly, the EPROM is selected if A15=0.
+When a 2K EPROM is used, address bits A10..A0 select a byte within the EPROM;
+the values of A14..A11 are ignored.
+When a 4K EPROM is used, address bits A11..A0 select a byte within the EPROM;
+the values of A14..A12 are ignored.
+
+Again similarly, the PIO is selected whenever /IORQ is active.
+Address bits A1..A0 select the PIO data or control port operated on;
+the values of A7..A0 are ignored.
+Address bits A15..A9 are not used for I/O addressing
+&mdash; the I/O instructions cannot specify them.
+
+Because the board logic ignores address bits not necessary to
+address the defined ranges, from the program's viewpoint the
+address ranges are aliased: the program can specify any value
+for the ignored address bits.
+It can, for example, address PIO port A control at address F2
+instead of 02.
+Ordinarily the aliasing does not matter.
+No reasonable programmer (by definition!) will use them.
+But being aware of the aliasing could help
+in understanding the behavior of a malfunctioning program.
+
+A simple example of a program that accesses aliased memory is
+one that tries to use more stack space than is available.
+When stack pointer drops below the beginning of the RAM space,
+it will wrap to the top of RAM and overwrite the data there,
+probably the bottom of the stack.
+The program will not malfunction until it pops the corrupted
+stack data, perhaps much later.
+An easy way for this to happen is for a recursive subroutine
+to recurse too far.
+
+#### About A15 ...
+
+The Z80 output pins are rated to drive one standard TTL load.
+Most of the Z80 CPU outputs drive the inputs of
+the Z80 PIO, the EPROM, and the two 2114 RAM chips,
+all of which are rated at 10&mu;A << 1 TTL load.
+/MREQ and /RD each also drive one input to the EPROM address decode logic.
+These are all easily within the capability of the Z80 outputs.
+
+A15, though, is connected to 3:
+one in the EPROM address decode logic, and
+two in the RAM address decode logic.
+This could have been avoided by inverting /A15 from the
+EPROM address decode logic using the unused NAND gate U6A.
+This would cost one more gate delay,
+but that's unlikely to cause any problems or slow down memory access.
+
+However ...
+
+The use of Low Power Schottky TTL devices eliminates this potential problem.
+Whereas a standard TTL input requires the driver to sink 1.6 mA for a low logic level,
+Low Power Schottky TTL only requires 0.4 mA.
+The Z80 outputs can sink 1.8 mA when at a low logic level,
+sufficient for one standard TTL input, but enough for 4 Low Power Schottky TTL inputs.
 
 ### Interrupt Request
 
@@ -227,6 +324,56 @@ It is up to the board user, and since for the 80-280 the interface to the rest o
 the system is the PIO ports, the user can choose to program a delay or a handshake
 to verify system readiness.
 The power-on auto-reset circuit does not have to provide all of the needed delay.
+
+### Unused Z80 CPU and Z80 PIO Features
+
+The Z80 CPU and the Z80 PIO have features that this board does not enable.
+Unused inputs are tied to a high logic level (inactive) through
+a 4.7K&ohm; resistor to Vcc.
+Unused outputs are not connected.
+
+#### Direct Memory Access (DMA)
+
+The Z80 CPU will cede control of the bus to other devices
+to allow them direct access to memory or I/O devices.
+The low signal /BUSRQ input causes the Z80 CPU to set the address bus, the data bus,
+and the control signals /MREQ, /IOREQ, /RD, /WR to a high impedance state
+at the end of the current machine cycle.
+The CPU signals that it has ceded the bus by activating the /BUSAK signal.
+
+The board ties CPU pin 25 /BUSRQ to Vcc through 4.7K&ohm; resistor,
+and leaves CPU pin 23 /BUSAK unconnected.
+
+#### Halt State
+
+The Z80 CPU indicates that it is halted, as a result of executing a HALT instruction,
+by activating the /HALT signal.
+The CPU will remain in the HALT state until it receives a non-maskable interrupt
+or an unmasked maskable interrupt.
+
+The board leaves CPU pin 18 /HALT unconnected.
+
+#### Memory Refresh
+
+The Z80 CPU uses the T3 and T4 clock states of an M1 instruction fetch cycle
+to refresh dynamic memories.
+It activates the /RFSH signal to indicate that the address bus has a refresh address.
+
+The board does not have any dynamic RAMs, so it leaves CPU pin 28 /RFSH unconnected.
+
+#### Interrupt Priority Chaining
+
+The Z80 PIO can participate in interrupt priority logic using the 
+IEI interrupt enable input and the IEO interrupt enable output signals.
+The PIO will generate a pending interrupt request if IEI is high,
+meaning no higher priority device is interrupting the CPU.
+The PIO will generate a high signal on the IEO output if it
+does not need to interrupt the CPU, enabling lower priority devices
+to do so.
+
+The board does not have any devices besides the PIO that can interrupt the CPU,
+so it ties PIO pin 24 IEI to Vcc through 4.7K&ohm; resistor,
+and leaves PIO pin 22 IEO unconnected.
 
 ## TEST 1 EPROM
 

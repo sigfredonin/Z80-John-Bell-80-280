@@ -400,10 +400,12 @@ separate program, if I needed to.
 
 The TinyDuino is a very small form factor Arduino compatible microcontroller.
 The configuration used for the EPROM Reader comprises:
+
 - TinyDuino Processor Board
 - TinyShield USB Board
 - TinyShield 16-LED Board (green)
 - TinyShield Proto 2 Board
+
 Pins soldered to the Proto 2 Board provide connections for the cable to the EPROM Reader circuit.
 
 ![TinyDuino](/image/TinyDuino_Board_Stack_433x308.PNG "TinyDuino board stack") ![TinyDuino Proto 2 annotated](/image/TinyShield_Proto_2_front_310x308_annotated.PNG "TinyDuino Proto 2 annotated with 2716 Reader connections")

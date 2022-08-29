@@ -124,10 +124,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      "lib_symbol_issues|1219200|1219200|22dee460-d951-4cb8-96fc-23e4de1071e3|00000000-0000-0000-0000-000000000000",
-      "lib_symbol_issues|1219200|609600|9570ccba-a61a-4d2e-862d-66474bfeab40|00000000-0000-0000-0000-000000000000"
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },
@@ -336,7 +333,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "TinyDuino 2114 RAM Test.kicad_pro",
+    "filename": "TinyDuino 2114 RAM TEST.kicad_pro",
     "version": 1
   },
   "net_settings": {
